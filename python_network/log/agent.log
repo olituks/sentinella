@@ -1,0 +1,4 @@
+INFO:root:Start the application
+INFO:root:start worker communication
+INFO:root:start worker psutil_cpu_count
+INFO:root:start worker psutil_process

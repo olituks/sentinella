@@ -1,0 +1,19 @@
+# -*- coding: utf-8 -*-
+from websocket import create_connection
+from multiprocessing import TimeoutError
+
+def websocket_comm():
+	ws = create_connection("ws://127.0.0.1:8888/")
+
+	while True:
+		try:
+			flux = queue_de_communication.get(0.1)
+			ws.send(flux)
+			result =  ws.recv()
+			print "Collecor say: %s" % result
+		except TimeoutError:
+			pass
+		except KeyboardInterrupt:
+			sys.exit(0)
+
+	ws.close()

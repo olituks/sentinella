@@ -1,0 +1,23 @@
+
+Front End :
+	Install componants:
+	-------------------
+	sudo pip install redis
+
+Collector :
+	Install componants:
+	-------------------
+	sudo apt-get install redis-server
+	ssh -f -L 1234:localhost:6379 server.com -NC
+	sudo pip install tornado
+	
+
+Agent :
+	Install componants:
+	-------------------
+	sudo pip install psutil
+	sudo pip install pyyaml
+	sudo pip install cronus
+	sudo pip install websocket-client
+
+
