@@ -48,7 +48,7 @@ def worker_communication_client(ws):
 			current_date = get_current_date(-60)
 			logging.debug(str(my_id) + " | " + str(current_date["today"]) + " " + str(current_date["h"]) + ":" + str(current_date["m"]))
 			#2014-11-10 06:54:09.284529:stal0008:cpu_count
-			all_keys = redis_db.keys("%s*:*:cpu_count" %(str(current_date["today"]) + " " + str(current_date["h"]) + ":" + str(current_date["m"])))
+			all_keys = redis_db.keys("%s*:*:cpu_count*" %(str(current_date["today"]) + " " + str(current_date["h"]) + ":" + str(current_date["m"])))
 			# logging.debug(str(my_id) + " | " + str(all_keys))
 			
 			result = []

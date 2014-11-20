@@ -21,6 +21,7 @@ db_cursor.execute('''CREATE TABLE IF NOT EXISTS messages (date DATETIME, agent_n
 def worker_db(communication_queue):
 	while True:
 		message = communication_queue.get(0.1)
+		logging.debug(message)
 		value = json.loads(message)
 		try:
 			value["value"] = base64.b64decode(value["value"])
@@ -44,7 +45,7 @@ def get_current_date():
 
 def save_warning_in_redis(key, value):
 	try:
-		#logging.debug("key / value: %s / %s" %(key, value) )
+		# logging.debug("key / value: %s / %s" %(key, value) )
 		redis_db.set(key, value)
 		redis_db.expire(key, timedelta(days=2))
 	except:
@@ -76,7 +77,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 	# the agent sent the message
 	def on_message(self, message):
 
-		logging.info('    Received: ' + message)
+		# logging.info('    Received: ' + message)
 		communication_queue.put(message)
 		
 		#broadcast message to all participant

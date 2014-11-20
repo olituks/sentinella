@@ -3,17 +3,17 @@
 #tick = seconds
 
 #The collector IP and port.
-communication: { 
+communication: {
   ws: 'ws://127.0.0.1:8888/' 
 }
 
 #All stuf you want to monitore.
-psutil_cpu_count: { 
-  tick: 5, 
-  min_logical_cpu: 10, 
-  min_cpu: 2 
+psutil_cpu_count: {
+  tick: 5,
+  min_logical_cpu: 8,
+  min_cpu: 1
 }
 
-psutil_process: { 
+psutil_process: {
   tick: 0 
 }

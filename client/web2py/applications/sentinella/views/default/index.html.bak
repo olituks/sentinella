@@ -1,0 +1,119 @@
+{{extend 'layout.html'}}
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script type="text/javascript" src="/sentinella/static/config.js"></script>
+    <script type="text/javascript">
+        var ws = undefined;
+        var interval = undefined;
+
+        function get_current_date(offset){
+            var current_date = {}
+
+            current_date["now"] = new Date();
+            if (offset != undefined){
+                if (offset < 0){
+                    // offset = seconds
+                    current_date["now"] = new Date(current_date["now"] - Math.abs(offset) * 1000);
+                }else{
+                    current_date["now"] = new Date(current_date["now"] + Math.abs(offset) * 1000);
+                }
+            }
+
+            current_date["YYYY"] = current_date["now"].getFullYear();
+            current_date["M"] = current_date["now"].getMonth() + 1;
+            current_date["D"] = current_date["now"].getDate();
+            current_date["h"] = current_date["now"].getHours();
+            current_date["h"] = ("0" + current_date["h"]).slice(-2);
+            current_date["m"] = current_date["now"].getMinutes();
+            current_date["m"] = ("0" + current_date["m"]).slice(-2);
+            current_date["s"] = current_date["now"].getSeconds();
+            current_date["s"] = ("0" + current_date["s"]).slice(-2);
+            current_date["today"] = current_date["YYYY"] + "-" + current_date["M"] + "-" + current_date["D"]
+            return current_date
+        }
+
+        function display_msg(received_msg){
+            document.getElementById("ws_msg").innerHTML = document.getElementById("ws_msg").innerHTML + "<br>" + received_msg;
+        }
+
+        function WebSocketTest(){
+            // WebSocket = undefined;
+            if (window.WebSocket){
+                console.log("Your web browser suport websocket.");
+
+                ws = new WebSocket(config["ws"]);
+
+                ws.onopen = function(){
+                    // Web Socket is connected, send data using send()
+                    var current_date = get_current_date()
+                    // request all datas for the day
+                    ws.send(current_date["today"]);
+                    console.log("Request is sent...");
+                    display_msg("Request is sent...");
+                };
+
+                ws.onmessage = function (evt){ 
+                    var received_msg = evt.data;
+                    console.log("Message:" + received_msg);
+                    display_msg(received_msg);
+                };
+
+                ws.onclose = function(){ 
+                    // websocket is closed.
+                    console.log("Connection is closed...");
+                    display_msg("Connection is closed...");
+                };
+            } else {
+                console.log("Websocket not suported by your browser, fallback solution started.");
+
+                function get_data(params) {
+                    $.ajax({
+                        url: config["fallback_ws"],
+                        type: "GET",
+                        cache: false,
+                        data: {message: params["date"]},
+                        success: function(data) {
+                            console.log(data);
+                            display_msg(data)
+                            if (params["poll"] === true){
+                                interval = setTimeout(function() {
+                                    var current_date = get_current_date(-60);
+                                    get_data({"poll": true, "date": current_date["today"] + " " + current_date["h"] + ":" + current_date["m"]}); 
+                                }, config["poll_hz"]);
+                            }
+                        },
+                        dataType: "html"
+                    })
+                }
+
+                var current_date = get_current_date()
+                // get all datas from the day
+                get_data({"poll": false, "date": current_date["today"]});
+
+                // get recurently the data from the collector
+                get_data({"poll": true, "date": current_date["today"] + " " + current_date["h"] + ":" + current_date["m"]});
+            }
+        }
+
+        function WebSocketStop(){
+            if (window.WebSocket){
+                ws.close();
+            }else{
+                clearTimeout(interval)
+                console.log("Connection is closed...");
+                display_msg("Connection is closed...");
+            }
+        }
+    </script>
+</head>
+<body>
+  <div id="sse">
+    <a href="javascript:WebSocketStart()">Run WebSocket</a>
+    <a href="javascript:WebSocketStop()">Stop WebSocket</a>
+  </div>
+
+  <div id="ws_msg"></div>
+</body>
+</html>
