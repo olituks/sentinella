@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys, os, time, atexit, psutil
+import sys, os, time, atexit, subprocess
 from signal import SIGTERM 
 
 class Daemon:
@@ -127,14 +127,16 @@ class Daemon:
 		"""
 		You should override this method when you subclass Daemon. It will be called after the process has been
 		daemonized by start() or restart().
-		"""
+		""" 
 
 	def kill_child_processes(self, parent_pid):
-	    try:
-	    	p = psutil.Process(parent_pid)
-	    except psutil.NoSuchProcess:
-	    	return
-	    
-	    child_pid = p.children(recursive=True)
-	    for pid in child_pid:
-	    	os.kill(pid.pid, SIGTERM)      
+		try:
+			ps_command = subprocess.Popen("ps -o pid --ppid %d --noheaders" % parent_pid, shell=True, stdout=subprocess.PIPE)
+			ps_output = ps_command.stdout.read()
+			retcode = ps_command.wait()
+			assert retcode == 0, "ps command returned %d" % retcode
+		except:
+			return
+
+		for pid_str in ps_output.split("\n")[:-1]:
+			os.kill(int(pid_str), SIGTERM)    
