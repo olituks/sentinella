@@ -1,0 +1,106 @@
+INFO:root:Start the application
+INFO:root:Frontend listen on 60888 port
+INFO:root:Stop the application
+INFO:root:Start the application
+INFO:root:Frontend listen on 60888 port
+INFO:root:config file /home/sysadmin/python_network/frontend/config.json load: OK
+INFO:root:redis connexion: OK
+INFO:root:Stop the application
+2014-12-07 11:40:46.315 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:40:46.316 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:41:17.878 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:41:17.878 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:41:26.191 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:41:26.192 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:41:26.192 INFO frontend - <module>: Start the application
+2014-12-07 11:42:39.513 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:42:39.513 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:42:39.513 INFO frontend - <module>: Start the application
+2014-12-07 11:43:33.709 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:43:33.709 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:43:53.428 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:43:53.429 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:43:53.429 INFO frontend - <module>: Start the application
+2014-12-07 11:44:29.49 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:44:29.49 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:44:29.49 INFO frontend - <module>: Start the application
+2014-12-07 11:44:49.724 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:44:49.724 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:44:49.725 INFO frontend - <module>: Start the application
+2014-12-07 11:44:49.726 INFO start_web2py - start: Web2Py pid: 21946
+2014-12-07 11:45:38.936 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:45:38.936 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:45:38.936 INFO frontend - <module>: Start the application
+2014-12-07 11:45:38.938 INFO start_web2py - start: Web2Py pid: 21975
+2014-12-07 11:45:38.947 INFO frontend - run: Frontend listen on 60888 port
+2014-12-07 11:46:27.252 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:46:27.252 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:46:27.252 INFO frontend - <module>: Stop the application
+2014-12-07 11:46:56.356 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:46:56.356 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:46:56.356 INFO frontend - <module>: Stop the application
+2014-12-07 11:47:07.680 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:47:07.680 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:47:07.680 INFO frontend - <module>: Restart the application
+2014-12-07 11:47:07.681 INFO start_web2py - start: Web2Py pid: 22075
+2014-12-07 11:47:07.684 INFO frontend - run: Frontend listen on 60888 port
+2014-12-07 11:48:09.5 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:48:09.6 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:48:09.6 INFO frontend - <module>: Restart the application
+2014-12-07 11:48:10.14 INFO start_web2py - start: Web2Py pid: 22128
+2014-12-07 11:48:10.129 INFO frontend - run: Frontend listen on 60888 port
+2014-12-07 11:48:16.948 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:48:16.948 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:48:16.948 INFO frontend - <module>: Stop the application
+2014-12-07 11:48:29.938 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 11:48:29.938 INFO frontend - <module>: redis connexion: OK
+2014-12-07 11:48:29.938 INFO frontend - <module>: Start the application
+2014-12-07 11:48:29.939 INFO start_web2py - start: Web2Py pid: 22185
+2014-12-07 11:48:29.942 INFO frontend - run: Frontend listen on 60888 port
+2014-12-07 13:14:56.91 DEBUG frontend - on_message: Receive this message: 2014-12-7
+2014-12-07 13:15:02.90 ERROR frontend - on_message: Unexpected error in WebSocketHandler: <class 'redis.exceptions.ConnectionError'>
+2014-12-07 13:15:02.91 INFO frontend - on_close: Client disconnected
+2014-12-07 13:15:21.255 DEBUG frontend - on_message: Receive this message: 2014-12-7
+2014-12-07 13:15:27.254 ERROR frontend - on_message: Unexpected error in WebSocketHandler: <class 'redis.exceptions.ConnectionError'>
+2014-12-07 13:19:22.191 INFO frontend - on_close: Client disconnected
+2014-12-07 13:19:23.214 DEBUG frontend - on_message: Receive this message: 2014-12-7
+2014-12-07 13:19:29.214 ERROR frontend - on_message: Unexpected error in WebSocketHandler: <class 'redis.exceptions.ConnectionError'>
+2014-12-07 13:21:05.961 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 13:21:05.961 INFO frontend - <module>: redis connexion: OK
+2014-12-07 13:21:05.961 INFO frontend - <module>: Stop the application
+2014-12-07 13:21:11.497 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 13:21:11.497 INFO frontend - <module>: redis connexion: OK
+2014-12-07 13:21:11.497 INFO frontend - <module>: Start the application
+2014-12-07 13:21:11.500 INFO start_web2py - start: Web2Py pid: 28216
+2014-12-07 13:21:11.504 INFO frontend - run: Frontend listen on 60888 port
+2014-12-07 13:21:18.26 DEBUG frontend - on_message: Receive this message: 2014-12-7
+2014-12-07 13:21:18.26 ERROR frontend - on_message: Unexpected error in WebSocketHandler: <class 'redis.exceptions.ConnectionError'>
+2014-12-07 13:28:41.906 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 13:28:41.906 INFO frontend - <module>: redis ip: 192.168.1.130
+2014-12-07 13:28:41.907 INFO frontend - <module>: redis connexion: OK
+2014-12-07 13:28:41.907 INFO frontend - <module>: Stop the application
+2014-12-07 13:28:44.971 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 13:28:44.971 INFO frontend - <module>: redis ip: 192.168.1.130
+2014-12-07 13:28:44.971 INFO frontend - <module>: redis connexion: OK
+2014-12-07 13:28:44.971 INFO frontend - <module>: Start the application
+2014-12-07 13:28:44.972 INFO start_web2py - start: Web2Py pid: 28525
+2014-12-07 13:28:44.976 INFO frontend - run: Frontend listen on 60888 port
+2014-12-07 13:29:11.338 DEBUG frontend - on_message: Receive this message: 2014-12-7
+2014-12-07 13:29:11.338 ERROR frontend - on_message: Unexpected error in WebSocketHandler: <class 'redis.exceptions.ConnectionError'>
+2014-12-07 13:34:40.238 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 13:34:40.239 INFO frontend - <module>: redis connection : 192.168.1.130:192.168.1.130
+2014-12-07 13:34:40.239 INFO frontend - <module>: redis connexion: OK
+2014-12-07 13:34:40.239 INFO frontend - <module>: Stop the application
+2014-12-07 13:34:43.332 INFO frontend - <module>: config file /home/sysadmin/python_network/frontend/config.json load: OK
+2014-12-07 13:34:43.332 INFO frontend - <module>: redis connection : 192.168.1.130:192.168.1.130
+2014-12-07 13:34:43.332 INFO frontend - <module>: redis connexion: OK
+2014-12-07 13:34:43.332 INFO frontend - <module>: Start the application
+2014-12-07 13:34:43.333 INFO start_web2py - start: Web2Py pid: 28704
+2014-12-07 13:34:43.337 INFO frontend - run: Frontend listen on 60888 port
+2014-12-07 13:34:49.724 DEBUG frontend - on_message: Receive this message: 2014-12-7
+2014-12-07 13:34:49.724 DEBUG frontend - on_message: Redis string query: 2014-12-7*:OLI-G750:cpu_count
+2014-12-07 13:34:49.725 ERROR frontend - on_message: Unexpected error in WebSocketHandler: <class 'redis.exceptions.ConnectionError'>
+2014-12-07 13:35:55.188 INFO frontend - on_close: Client disconnected
+2014-12-07 13:35:56.375 DEBUG frontend - on_message: Receive this message: 2014-12-7
+2014-12-07 13:35:56.376 DEBUG frontend - on_message: Redis string query: 2014-12-7*:OLI-G750:cpu_count
+2014-12-07 13:35:56.376 ERROR frontend - on_message: Unexpected error in WebSocketHandler: <class 'redis.exceptions.ConnectionError'>

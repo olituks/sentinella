@@ -1,0 +1,6 @@
+Open websocket port 8888 in the server firwall
+
+Open port for websocket communication
+#iptables -I INPUT 5 -p tcp -m state --state NEW -m tcp --dport 60888 -j ACCEPT
+#service iptables save
+#service iptables restart

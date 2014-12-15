@@ -1,0 +1,11 @@
+The application has been tested with Centos 6.6 & python 2.6.6
+
+Psutil can't be used like a standard python library. 
+You need to install it on the system before using.
+--------------------------------------------
+
+    - sudo yum install gcc python-devel
+    - cd need_to_be_installed
+    - tar xzf psutil-2.1.3.tar.gz
+    - cd  psutil-2.1.3
+    - python setup.py install

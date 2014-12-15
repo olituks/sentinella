@@ -1,0 +1,44 @@
+2014-11-30 14:24:59.805 INFO collector - <module>: config file /home/sysadmin/python_network/collector/config.json load: OK
+2014-11-30 14:24:59.806 INFO collector - <module>: redis connexion: OK
+2014-11-30 14:24:59.806 INFO collector - <module>: sqlite3 initilisation: OK
+2014-11-30 14:24:59.807 INFO collector - <module>: Start the application
+2014-11-30 14:24:59.810 ERROR collector - run: Unexpected error in MyDaemon: <class 'socket.error'>
+2014-11-30 14:25:02.94 INFO collector - <module>: config file /home/sysadmin/python_network/collector/config.json load: OK
+2014-11-30 14:25:02.94 INFO collector - <module>: redis connexion: OK
+2014-11-30 14:25:02.94 INFO collector - <module>: sqlite3 initilisation: OK
+2014-11-30 14:25:02.95 INFO collector - <module>: Stop the application
+2014-11-30 14:28:37.935 INFO collector - <module>: config file /home/sysadmin/python_network/collector/config.json load: OK
+2014-11-30 14:28:37.936 INFO collector - <module>: redis connexion: OK
+2014-11-30 14:28:37.936 INFO collector - <module>: sqlite3 initilisation: OK
+2014-11-30 14:28:37.937 INFO collector - <module>: Start the application
+2014-11-30 14:28:37.939 DEBUG collector - run: test1
+2014-11-30 14:28:37.940 ERROR collector - run: Unexpected error in MyDaemon: <class 'socket.error'>
+2014-11-30 14:30:11.980 INFO collector - <module>: config file /home/sysadmin/python_network/collector/config.json load: OK
+2014-11-30 14:30:11.980 INFO collector - <module>: redis connexion: OK
+2014-11-30 14:30:11.980 INFO collector - <module>: sqlite3 initilisation: OK
+2014-11-30 14:30:11.981 INFO collector - <module>: Start the application
+2014-11-30 14:30:11.983 DEBUG collector - run: test1
+2014-11-30 14:30:11.984 DEBUG collector - run: test2 8888
+2014-11-30 14:30:11.987 INFO collector - run: Collector listen on 8888 port
+2014-11-30 14:30:15.520 INFO collector - <module>: config file /home/sysadmin/python_network/collector/config.json load: OK
+2014-11-30 14:30:15.520 INFO collector - <module>: redis connexion: OK
+2014-11-30 14:30:15.520 INFO collector - <module>: sqlite3 initilisation: OK
+2014-11-30 14:30:15.521 INFO collector - <module>: Stop the application
+2014-12-07 13:15:56.932 INFO collector - <module>: config file /home/sysadmin/python_network/collector/config.json load: OK
+2014-12-07 13:15:56.932 INFO collector - <module>: redis connexion: OK
+2014-12-07 13:15:56.933 INFO collector - <module>: sqlite3 initilisation: OK
+2014-12-07 13:15:56.935 INFO collector - <module>: Start the application
+2014-12-07 13:15:56.943 INFO collector - run: Collector listen on 8888 port
+2014-12-07 13:18:03.749 INFO collector - open: New client connected
+2014-12-07 13:19:03.815 INFO collector - on_close: Client disconnected
+2014-12-07 13:19:05.75 INFO collector - open: New client connected
+2014-12-07 13:35:41.671 INFO collector - <module>: config file /home/sysadmin/python_network/collector/config.json load: OK
+2014-12-07 13:35:41.671 INFO collector - <module>: redis connexion: OK
+2014-12-07 13:35:41.671 INFO collector - <module>: sqlite3 initilisation: OK
+2014-12-07 13:35:41.672 INFO collector - <module>: Stop the application
+2014-12-07 13:35:46.629 INFO collector - <module>: config file /home/sysadmin/python_network/collector/config.json load: OK
+2014-12-07 13:35:46.629 INFO collector - <module>: redis connexion: OK
+2014-12-07 13:35:46.629 INFO collector - <module>: sqlite3 initilisation: OK
+2014-12-07 13:35:46.630 INFO collector - <module>: Start the application
+2014-12-07 13:35:46.636 INFO collector - run: Collector listen on 8888 port
+2014-12-07 13:35:47.103 INFO collector - open: New client connected

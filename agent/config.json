@@ -1,0 +1,15 @@
+{
+    "communication": {
+        "ws": "ws://192.168.1.198:8888/"
+    },
+    "psutil_cpu_count": {
+        "tick": 5,
+        "tick_error": 1,
+        "min_logical_cpu": 10,
+        "min_cpu": 2
+    },
+    "psutil_process": {
+        "tick": 0,
+        "tick_error": 1
+    }
+}

@@ -1,0 +1,244 @@
+{{extend 'layout.html'}}
+{{response.files.append(URL('static','css/my_css.css'))}}
+{{include 'web2py_ajax.html'}}
+
+    <script type="text/javascript" src="/sentinella/static/config.js"></script>
+    <script type="text/javascript" src="/sentinella/static/js/gauss.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        var ws = undefined;
+        var interval = undefined;
+        var collection = gauss.Collection;
+        var alerts = new collection();
+        var current_alerts = [];
+
+
+        function get_current_date(offset){
+            var current_date = {}
+
+            current_date["now"] = new Date();
+            if (offset != undefined){
+                if (offset < 0){
+                    // offset = seconds
+                    current_date["now"] = new Date(current_date["now"] - Math.abs(offset) * 1000);
+                }else{
+                    current_date["now"] = new Date(current_date["now"] + Math.abs(offset) * 1000);
+                }
+            }
+
+            current_date["YYYY"] = current_date["now"].getFullYear();
+            current_date["M"] = current_date["now"].getMonth() + 1;
+            current_date["D"] = current_date["now"].getDate();
+            current_date["h"] = current_date["now"].getHours();
+            current_date["h"] = ("0" + current_date["h"]).slice(-2);
+            current_date["m"] = current_date["now"].getMinutes();
+            current_date["m"] = ("0" + current_date["m"]).slice(-2);
+            current_date["s"] = current_date["now"].getSeconds();
+            current_date["s"] = ("0" + current_date["s"]).slice(-2);
+
+            if(current_date["D"] < 10) {
+                current_date["D"] = '0' + current_date["D"];
+            } 
+
+            if(current_date["M"] < 10) {
+                current_date["M"] = '0' + current_date["M"];
+            }
+
+            current_date["today"] = current_date["YYYY"] + "-" + current_date["M"] + "-" + current_date["D"]
+            current_date["timestamp"] = Date.parse(current_date["today"] + " " + current_date["h"] + ":" + current_date["m"] + ":" + current_date["s"])
+
+            return current_date
+        }
+
+        function display_msg(received_msg){
+            try {
+                var parsedJson = $.parseJSON(received_msg);
+                if ((parsedJson !== null) && (parsedJson !== undefined)){
+
+                    var my_new_events = [];
+                    for (index = 0; index < parsedJson.length; ++index) {
+                        
+                        var my_key = parsedJson[index]["key"];
+                        var my_key_parts = my_key.split(":");
+                        // save date in timestamp format
+                        parsedJson[index]["date"] = Date.parse(my_key_parts[0] + ":" + my_key_parts[1] + ":" + my_key_parts[2]);
+                        parsedJson[index]["srv"] = my_key_parts[3];
+                        parsedJson[index]["function"] = my_key_parts[4];
+                        parsedJson[index]["prev_key"] = my_key.replace(/ /g, "_");
+
+                        my_new_events.push(parsedJson[index])
+                    }
+
+                    // sort events by date
+                    my_new_events.sort(function(a,b){
+                        var c = new Date(a.date);
+                        var d = new Date(b.date);
+                        return c-d;
+                    });
+
+                    // read all alerts and update the current_alerts array
+                    for (index = 0; index < my_new_events.length; ++index) {
+                        var my_obj = my_new_events[index];
+                        var status = undefined;
+                        
+                        if (current_alerts.length === 0){
+                            current_alerts.push(my_obj);
+                        }else{
+                            for (index2 = 0; index2 < current_alerts.length; ++index2) {
+                                if (current_alerts[index2]["function"] == my_obj["function"] && current_alerts[index2]["srv"] == my_obj["srv"]){
+                                    if (my_obj["date"] > current_alerts[index2]["date"]){
+                                        current_alerts[index2]["date"] = my_obj["date"];
+                                        current_alerts[index2]["key"] = my_obj["key"];
+                                        current_alerts[index2]["value"] = my_obj["value"];
+                                    }
+
+                                    status = true;
+                                    break;
+                                }else{
+                                    status = false;
+                                }
+                            }
+
+                            if (status === false){
+                                current_alerts.push(my_obj);
+                            }
+                        }
+                    }
+
+                    // add new events in the Collection
+                    alerts.append(my_new_events)
+                    // var test = alerts.find({ function: "cpu_count" })
+
+
+                    // find the last occurence
+                    // var last_element = alerts.lastIndexBy(function(e) { return e.function === 'cpu_count' });
+
+                    // dislpay or remove old alerts
+                    for (index = 0; index < current_alerts.length; ++index) {
+                        var my_obj = current_alerts[index];
+                        var my_element = document.getElementById(my_obj["prev_key"]);
+
+                        if (my_obj["date"] < get_current_date(-60)["timestamp"]){
+                            // clean the old solved alert
+                            current_alerts.splice(index, 1);
+                            if (my_element != undefined){
+                                my_element.parentNode.removeChild(my_element);
+                            }
+                        }else{
+                            // add / update alerts
+                            if (my_element != undefined){
+                                // check if value = solved
+                                if (my_obj["value"] === "solved"){
+                                    my_element.className = "alert alert-success";
+                                }else{
+                                    my_element.className = "alert alert-error";
+                                }
+                                my_element.querySelector("#date").innerHTML = "date : " + new Date(my_obj["date"]);
+                            }else{
+                                var my_html = "";
+                                if (my_obj["value"] === "solved"){
+                                    var my_html = "<div class='alert alert-success' id='" + my_obj["prev_key"] + "'>";
+                                }else{
+                                    var my_html = "<div class='alert alert-error' id='" + my_obj["prev_key"] + "'>";
+                                }
+                                
+                                my_html = my_html + "<span id='date' class='data_alert'>date : " + new Date(my_obj["date"]) + "</span>";
+                                my_html = my_html + "<span id='srv' class='data_alert'>srv : " + my_obj["srv"] + "</span>";
+                                my_html = my_html + "<span id='category' class='data_alert'>category : " + my_obj["function"] + "</span>";
+                                my_html = my_html + "</div>";
+
+                                document.getElementById("ws_msg").innerHTML = document.getElementById("ws_msg").innerHTML + my_html;
+                            }
+                        }
+                    }
+                }else{
+                    console.log(received_msg);
+                }
+            }catch(err){
+                console.log(received_msg);
+            }
+        }
+
+        function WebSocketStart(){
+            // WebSocket = undefined;
+            if (window.WebSocket){
+                // console.log("Your web browser suport websocket.");
+                display_msg("Your web browser suport websocket.");
+
+                ws = new WebSocket(config["ws"]);
+
+                ws.onopen = function(){
+                    // Web Socket is connected, send data using send()
+                    var current_date = get_current_date()
+                    // request all datas for the day
+                    console.log("send current date:" + current_date);
+                    ws.send(current_date["today"]);
+                    // console.log("Request is sent...");
+                    display_msg("Request is sent...");
+                };
+
+                ws.onmessage = function (evt){ 
+                    var received_msg = evt.data;
+                    // console.log("Message:" + received_msg);
+                    display_msg(received_msg);
+                };
+
+                ws.onclose = function(){ 
+                    // websocket is closed.
+                    // console.log("Connection is closed...");
+                    display_msg("Connection is closed...");
+                };
+            } else {
+                // console.log("Websocket not suported by your browser, fallback solution started.");
+                display_msg("Websocket not suported by your browser, fallback solution started.");
+
+                function get_data(params) {
+                    $.ajax({
+                        url: config["fallback_ws"],
+                        type: "GET",
+                        cache: false,
+                        data: {message: params["date"]},
+                        success: function(data) {
+                            // console.log(data);
+                            display_msg(data)
+                            if (params["poll"] === true){
+                                interval = setTimeout(function() {
+                                    var current_date = get_current_date(-60);
+                                    get_data({"poll": true, "date": current_date["today"] + " " + current_date["h"] + ":" + current_date["m"]}); 
+                                }, config["poll_hz"]);
+                            }
+                        },
+                        dataType: "html"
+                    })
+                }
+
+                var current_date = get_current_date()
+                // get all datas from the day
+                get_data({"poll": false, "date": current_date["today"]});
+
+                // get recurently the data from the collector
+                get_data({"poll": true, "date": current_date["today"] + " " + current_date["h"] + ":" + current_date["m"]});
+            }
+        }
+
+        function WebSocketStop(){
+            if (window.WebSocket){
+                ws.close();
+            }else{
+                clearTimeout(interval)
+                // console.log("Connection is closed...");
+                display_msg("Connection is closed...");
+            }
+        }
+    </script>
+</head>
+<body>
+  <div class="btn-group">
+    <a class="btn" href="javascript:WebSocketStart()">Run WebSocket</a>
+    <a class="btn" href="javascript:WebSocketStop()">Stop WebSocket</a>
+  </div>
+
+  <p>
+    <div id="ws_msg"></div>
+  </p>
+</body>
+

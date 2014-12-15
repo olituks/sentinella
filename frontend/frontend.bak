@@ -1,0 +1,197 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import os, sys, logging, json, base64, platform
+import subprocess as sub
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/library')
+
+import redis
+import tornado.web, tornado.websocket, tornado.ioloop
+from multiprocessing import Process, Queue
+from daemonize import Daemon
+from start_web2py import Web2PyProcess
+from worker_communication import worker_communication_client
+
+#-----------------------------------
+
+base_path = os.path.dirname(os.path.abspath(__file__))
+config = None
+redis_db = None
+web2py_process = None
+host_name = platform.node()
+
+#Initialise interprocess queue
+communication_queue = Queue()
+
+#Create a worker
+class Worker(Process):
+	def __init__(self, communication_queue, function):
+		self.communication_queue = communication_queue
+		super(Worker, self).__init__()
+	
+	def run(self):
+		method_name = self.function
+		possibles = globals().copy()
+		possibles.update(locals())
+		
+		try:
+			method = possibles.get(method_name)(self.communication_queue)    
+		except:
+			logging.error("Start worker error %s" %(sys.exc_info()[0]))
+
+class WebSocketHandler(tornado.websocket.WebSocketHandler):
+
+	def check_origin(self, origin):
+		return True
+
+	def open(self):
+		try:
+			pass
+		except:
+			pass
+
+	def on_message(self, message):
+		try:
+			logging.debug("Receive this message: %s" %(str(message)))
+			#2014-11-10 06:54:09.284529:stal0008:cpu_count
+			logging.debug("Redis string query: %s" %("%s*:*:cpu_count" %(str(message))))
+			all_keys = redis_db.keys("%s*:*:cpu_count" %(str(message)))
+			result = []
+			for index in all_keys:
+				my_json = {}
+				my_json["key"] = index
+				my_json["value"] = redis_db.get(index)
+				result.append(my_json)
+			
+			#logging.debug(result)
+			self.write_message(json.dumps(result))
+		except:
+			logging.error("Unexpected error in WebSocketHandler - on_message: %s" %(sys.exc_info()[0]))
+
+	# agent disconnected
+	def on_close(self):
+		logging.info('Client disconnected')
+
+class MyDaemon(Daemon):
+	def run(self):
+		try:
+			logging.debug("start")
+			#start a worker
+			logging.info("Start worker_communication_client.")
+			worker = Worker(communication_queue, "worker_communication_client")
+			logging.info(worker)
+			worker.start()
+
+			#start tornado webserver
+			#unsecure tornado server
+			application.listen(config["internal_ws"]["port"])
+			logging.info('Frontend listen on %s port' %(config["internal_ws"]["port"]))
+
+			#secure tornado server
+			#http_server = tornado.httpserver.HTTPServer(application, ssl_options={
+			#	"certfile": "/var/pyTest/keys/ca.csr",
+			#	"keyfile": "/var/pyTest/keys/ca.key",
+			#})
+			#http_server.listen(443)
+
+			tornado.ioloop.IOLoop.instance().start()
+
+			# while True:
+			# 	time.sleep(1)
+
+		except:
+			logging.error("Unexpected error in MyDaemon: %s" %(sys.exc_info()[0]))
+
+class JsonHandler(tornado.web.RequestHandler):
+	def set_default_headers(self):
+		# VM OK
+		#self.set_header("Access-Control-Allow-Origin", "http://192.168.1.130:8000")
+
+		# local OK
+		self.set_header("Access-Control-Allow-Origin", "http://127.0.0.1:8000")
+		self.set_header("Content-Type", "application/json; charset=utf-8")
+
+	@tornado.web.asynchronous
+	def get(self):
+		try:
+			# logging.debug("in get function")
+			# self.write("Hello, world")
+			# logging.debug("send HelloWorld...")
+			# self.finish()
+
+			message = self.get_argument("message", default="")
+			logging.debug("Receive this message: %s" %(str(message)))
+			logging.debug("debug11")
+			#2014-11-10 06:54:09.284529:stal0008:cpu_count
+			all_keys = redis_db.keys("%s*:%s:cpu_count" %(str(message), str(host_name)))
+			logging.debug("debug12")
+			result = []
+			logging.debug("debug13")
+			for index in all_keys:
+				logging.debug("debug14")
+				my_json = {}
+				logging.debug("debug15")
+				my_json["key"] = index
+				logging.debug("debug16")
+				my_json["value"] = redis_db.get(index)
+				logging.debug("debug17")
+				result.append(my_json)
+				logging.debug("debug18")
+				
+			self.write(json.dumps(result))
+			logging.debug("debug19")
+			self.finish()
+		except:
+			logging.error("Unexpected error in JsonHandler - get: %s" %(sys.exc_info()[0]))
+
+application = tornado.web.Application([
+    (r"/*", WebSocketHandler),
+    (r"/get_json/", JsonHandler),
+])
+
+if __name__ == '__main__':
+	logging.basicConfig(filename=base_path + '/log/frontend.log',level=logging.DEBUG, format='%(asctime)s.%(msecs)d %(levelname)s %(module)s - %(funcName)s: %(message)s', datefmt="%Y-%m-%d %H:%M:%S")
+
+	#Load the config file
+	try:
+		stream = open(base_path + '/config.json', 'r')
+		config = json.load(stream)
+		stream.close()
+		logging.info("config file %s load: OK" %(base_path + '/config.json'))
+	except:
+		logging.error("Unexpected error in load config file: %s" %(sys.exc_info()[0]))
+		sys.exit(1)
+
+	#Initialise redis communication
+	try:
+		logging.info("redis connection : %s:%s" %(config["redis"]["ip"], config["redis"]["port"]))
+		redis_db = redis.StrictRedis(host=config["redis"]["ip"], port=config["redis"]["port"], db=0)
+		logging.info("redis connexion: OK")
+	except:
+		logging.error("Unexpected error in redis connexion: %s" %(sys.exc_info()[0]))
+		sys.exit(1)
+
+	daemon = MyDaemon('/tmp/daemon-frontend.pid')
+	web2pyprocess = Web2PyProcess()
+	if len(sys.argv) == 2:
+		if 'start' == sys.argv[1]:
+			logging.info('Start the application')
+			web2pyprocess.start()
+			daemon.start()
+		elif 'stop' == sys.argv[1]:
+			logging.info('Stop the application')
+			web2pyprocess.stop()
+			daemon.stop()
+		elif 'restart' == sys.argv[1]:
+			logging.info('Restart the application')
+			web2pyprocess.restart()
+			daemon.restart()
+		else:
+			logging.info('Unknown command!')
+			print "Unknown command"
+			sys.exit(2)
+		sys.exit(0)
+	else:
+		print "usage: %s start|stop|restart" % sys.argv[0]
+		sys.exit(2)
